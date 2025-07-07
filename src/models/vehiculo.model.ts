@@ -11,6 +11,8 @@ export class Vehiculo {
     marca: string;
     @Column()
     modelo: string;
+    @Column({default: 0.00})
+    velocidad: number;
     @Column()
     equipoID: number;
     @OneToOne( () => Equipo, equipo => equipo.vehiculo )

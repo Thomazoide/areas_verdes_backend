@@ -1,5 +1,9 @@
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { Empleado } from "src/models/empleado.model";
+import { Equipo } from "src/models/equipo.model";
+import { Supervisor } from "src/models/supervisor.model";
+import { Vehiculo } from "src/models/vehiculo.model";
 
 export const typeOrmConfig = (env: ConfigService): TypeOrmModuleOptions => ({
     type: "mariadb",
@@ -8,6 +12,6 @@ export const typeOrmConfig = (env: ConfigService): TypeOrmModuleOptions => ({
     database: env.get<string>("DBNAME"),
     username: env.get<string>("DBUSER"),
     password: env.get<string>("DBPASS"),
-    entities: [],
+    entities: [Supervisor, Empleado, Vehiculo, Equipo],
     synchronize: true
 })

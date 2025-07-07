@@ -12,7 +12,7 @@ export class Equipo {
     @Column()
     supervisorID: number;
     @OneToOne( () => Supervisor, supervisor => supervisor.equipo )
-    @JoinColumn({name: "supervisorID"})
+    @JoinColumn({name: "supervisorID", referencedColumnName: "id"})
     supervisor: Supervisor;
     @OneToMany( () => Empleado, empleado => empleado.equipo )
     empleados: Empleado[];
