@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Equipo } from "./equipo.model";
 
 @Entity("supervisores")
 export class Supervisor {
@@ -13,11 +14,15 @@ export class Supervisor {
     @Column()
     celular: string;
     @Column({type: "float", nullable: true})
-    longitud: number
+    longitud: number;
     @Column({type: "float", nullable: true})
-    latitud: number
+    latitud: number;
     @Column({type: "float", nullable: true})
-    altitud: number
+    altitud: number;
     @Column({type: "float", nullable: true})
-    velocidad: number
+    velocidad: number;
+    @Column({nullable: true})
+    equipoID: number;
+    @OneToOne( () => Equipo, equipo => equipo.supervisor )
+    equipo: Equipo;
 }

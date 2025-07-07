@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Supervisor } from "./supervisor.model";
 import { Empleado } from "./empleado.model";
+import { Vehiculo } from "./vehiculo.model";
 
 @Entity("equipos")
 export class Equipo {
@@ -10,9 +11,14 @@ export class Equipo {
     nombre: string;
     @Column()
     supervisorID: number;
-    @OneToOne( () => Supervisor )
+    @OneToOne( () => Supervisor, supervisor => supervisor.equipo )
     @JoinColumn({name: "supervisorID"})
-    supervisor: Supervisor
+    supervisor: Supervisor;
     @OneToMany( () => Empleado, empleado => empleado.equipo )
-    empleados: Empleado[]
+    empleados: Empleado[];
+    @Column()
+    vehiculoID: number;
+    @OneToOne( () => Vehiculo, vehiculo => vehiculo.equipo )
+    @JoinColumn({name: "vehiculoID"})
+    vehiculo: Vehiculo;
 }
