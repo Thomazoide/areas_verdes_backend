@@ -1,5 +1,6 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./equipo.model";
+import { Beacon } from "./beacon.model";
 
 @Entity("supervisores")
 export class Supervisor {
@@ -25,4 +26,6 @@ export class Supervisor {
     equipoID: number;
     @OneToOne( () => Equipo, equipo => equipo.supervisor )
     equipo: Equipo;
+    @OneToOne( () => Beacon, beacon => beacon.supervisor )
+    beacon: Beacon
 }

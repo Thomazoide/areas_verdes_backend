@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./equipo.model";
+import { Beacon } from "./beacon.model";
 
 @Entity("vehiculos")
 export class Vehiculo {
@@ -18,5 +19,6 @@ export class Vehiculo {
     @OneToOne( () => Equipo, equipo => equipo.vehiculo )
     @JoinColumn({name: "equipoID"})
     equipo: Equipo;
-    
+    @OneToOne( () => Beacon, beacon => beacon.vehiculo )
+    beacon: Beacon
 }

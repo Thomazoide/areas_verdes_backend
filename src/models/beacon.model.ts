@@ -11,10 +11,10 @@ export class Beacon {
     mac: string;
     @Column()
     bateria: number;
-    @OneToOne( () => Empleado )
+    @OneToOne( () => Empleado, empleado => empleado.beacon )
     empleado: Empleado;
-    @OneToOne( () => Supervisor )
+    @OneToOne( () => Supervisor, supervisor => supervisor.beacon )
     supervisor: Supervisor;
-    @OneToOne( () => Vehiculo )
+    @OneToOne( () => Vehiculo, vehiculo => vehiculo.beacon )
     vehiculo: Vehiculo;
 };
