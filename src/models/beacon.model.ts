@@ -2,6 +2,7 @@ import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Empleado } from "./empleado.model";
 import { Supervisor } from "./supervisor.model";
 import { Vehiculo } from "./vehiculo.model";
+import { Zona } from "./zona.model";
 
 @Entity("beacons")
 export class Beacon {
@@ -17,4 +18,6 @@ export class Beacon {
     supervisor: Supervisor;
     @OneToOne( () => Vehiculo, vehiculo => vehiculo.beacon )
     vehiculo: Vehiculo;
+    @OneToOne( () => Zona, zona => zona.beacon )
+    zona: Zona;
 };

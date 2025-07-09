@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./equipo.model";
 import { Beacon } from "./beacon.model";
 
@@ -14,7 +14,10 @@ export class Empleado {
     email: string;
     @Column()
     celular: string;
+    @Column()
+    equipoID: number;
     @ManyToOne( () => Equipo, equipo => equipo.empleados, {nullable: true} )
+    @JoinColumn({name: "equipoID"})
     equipo: Equipo
     @OneToOne( () => Beacon, beacon => beacon.empleado )
     beacon: Beacon

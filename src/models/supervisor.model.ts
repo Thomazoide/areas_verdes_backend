@@ -14,14 +14,6 @@ export class Supervisor {
     email: string;
     @Column()
     celular: string;
-    @Column({type: "float", nullable: true})
-    longitud: number;
-    @Column({type: "float", nullable: true})
-    latitud: number;
-    @Column({type: "float", nullable: true})
-    altitud: number;
-    @Column({type: "float", nullable: true})
-    velocidad: number;
     @Column({nullable: true})
     equipoID: number;
     @OneToOne( () => Equipo, equipo => equipo.supervisor )
