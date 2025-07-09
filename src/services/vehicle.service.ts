@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { vehicleNotFoundError } from "src/errors/errors";
 import { Vehiculo } from "src/models/vehiculo.model";
 import { Repository } from "typeorm";
 
@@ -10,8 +11,6 @@ export class VehicleService {
         private readonly vehicleRepo: Repository<Vehiculo>
     ){};
 
-    notFoundError: Error = new Error("vehiculo no encontrado");
-
     async CreateVehicle(vehicle: Partial<Vehiculo>): Promise<Vehiculo> {
         const newVehicle = this.vehicleRepo.create(vehicle);
         return this.vehicleRepo.save(newVehicle);
@@ -19,19 +18,19 @@ export class VehicleService {
 
     async FindByID(id: number): Promise<Vehiculo> {
         const vehicle = await this.vehicleRepo.findOneBy({id});
-        if(!vehicle) throw this.notFoundError;
+        if(!vehicle) throw vehicleNotFoundError;
         return vehicle;
     }
 
     async FindByPlate(plate: string): Promise<Vehiculo> {
         const vehicle = await this.vehicleRepo.findOneBy({patente: plate});
-        if(!vehicle) throw this.notFoundError;
+        if(!vehicle) throw vehicleNotFoundError;
         return vehicle;
     }
 
     async UpdateVehicle(vehicle: Partial<Vehiculo>): Promise<Vehiculo> {
         const exists = await this.vehicleRepo.findOneBy({id: vehicle.id});
-        if(!exists) throw this.notFoundError;
+        if(!exists) throw vehicleNotFoundError;
         return this.vehicleRepo.save(vehicle);
     }
 };

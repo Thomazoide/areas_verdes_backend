@@ -12,6 +12,12 @@ export class Vehiculo {
     marca: string;
     @Column()
     modelo: string;
+    @Column()
+    latitud: number;
+    @Column()
+    longitud: number;
+    @Column()
+    altitud: number;
     @Column({default: 0.00})
     velocidad: number;
     @Column()

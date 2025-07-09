@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { employeeNotFoundError, supervisorNotFoundError, teamNotFoundError, vehicleNotFoundError } from "src/errors/errors";
 import { Empleado } from "src/models/empleado.model";
 import { Equipo } from "src/models/equipo.model";
 import { Supervisor } from "src/models/supervisor.model";
@@ -19,14 +20,9 @@ export class TeamService {
         private readonly vehicleRepo: Repository<Vehiculo>
     ){};
 
-    employeeNotFoundError: Error = new Error("empleado no encontrado");
-    supervisorNotFoundError: Error = new Error("supervisor no encontrado");
-    teamNotFoundError: Error = new Error("equipo no encontrado");
-    vehicleNotFoundError: Error = new Error("vehiculo no encontrado");
-
     async CreateTeam(team: Partial<Equipo>, supervisorID: number): Promise<Equipo> {
         const supervisor = await this.supervisorRepo.findOneBy({id: supervisorID});
-        if(!supervisor) throw this.supervisorNotFoundError;
+        if(!supervisor) throw supervisorNotFoundError;
         const newTeam = this.teamsRepo.create({
             ...team,
             supervisor: supervisor
@@ -36,14 +32,14 @@ export class TeamService {
 
     async AddEmployee(employeeID: number, teamID: number): Promise<Equipo> {
         const employee = await this.employeeRepo.findOneBy({id: employeeID});
-        if(!employee) throw this.employeeNotFoundError;
+        if(!employee) throw employeeNotFoundError;
         const team = await this.teamsRepo.findOne({
             where: {
                 id: teamID
             },
             relations: ["empleados"]
         });
-        if(!team) throw this.teamNotFoundError;
+        if(!team) throw teamNotFoundError;
         employee.equipo = team;
         await this.employeeRepo.save(employee);
         return this.teamsRepo.findOne({
@@ -56,14 +52,14 @@ export class TeamService {
 
     async AddVehicle(vehicleID: number, teamID: number): Promise<Equipo> {
         const vehicle = await this.vehicleRepo.findOneBy({id: vehicleID});
-        if(!vehicle) throw this.vehicleNotFoundError;
+        if(!vehicle) throw vehicleNotFoundError;
         const team = await this.teamsRepo.findOne({
             where: {
                 id: teamID
             },
             relations: ["vehiculos"]
         });
-        if(!team) throw this.teamNotFoundError;
+        if(!team) throw teamNotFoundError;
         vehicle.equipo = team;
         await this.vehicleRepo.save(vehicle);
         return this.teamsRepo.findOne({
@@ -85,7 +81,11 @@ export class TeamService {
             where: {id},
             relations: ["empleados", "supervisores", "vehiculos"]
         });
-        if(!team) throw this.teamNotFoundError;
+        if(!team) throw teamNotFoundError;
         return team;
+    }
+
+    async UpdateTeam(team: Partial<Equipo>): Promise<Equipo> {
+        return this.teamsRepo.save(team);
     }
 };
