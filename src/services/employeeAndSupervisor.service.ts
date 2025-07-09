@@ -21,7 +21,7 @@ export class employeeAndSupervisorService {
 
     async CreateSupervisor(sup: Partial<Supervisor>): Promise<Supervisor> {
         const newSupervisor = this.supervisorRepo.create(sup);
-        return newSupervisor;
+        return this.supervisorRepo.save(newSupervisor);
     }
 
     async FindEmployeeByID(id: number): Promise<Empleado> {

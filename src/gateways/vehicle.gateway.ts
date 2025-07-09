@@ -3,7 +3,7 @@ import { Server } from "socket.io";
 import { Vehiculo } from "src/models/vehiculo.model";
 import { VehicleService } from "src/services/vehicle.service";
 
-@WebSocketGateway({namespace: "/vehiculos/position"})
+@WebSocketGateway({namespace: "/position"})
 export class VehicleGateway {
     @WebSocketServer()
     server: Server;
