@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./equipo.model";
 import { Beacon } from "./beacon.model";
+import { vehiclePosition } from "src/types/types";
 
 @Entity("vehiculos")
 export class Vehiculo {
@@ -12,14 +13,18 @@ export class Vehiculo {
     marca: string;
     @Column()
     modelo: string;
-    @Column({nullable: true})
+    @Column({type: "double", nullable: true})
     latitud: number;
-    @Column({nullable: true})
+    @Column({type: "double", nullable: true})
     longitud: number;
-    @Column({nullable: true})
+    @Column({type: "double", nullable: true})
     altitud: number;
-    @Column({default: 0.00})
+    @Column({type: "float", default: 0.00})
     velocidad: number;
+    @Column({type: "float", default: 0.00})
+    heading: number;
+    @Column({type: "datetime", nullable: true})
+    timestamp: Date;
     @Column({nullable: true})
     equipoID: number;
     @Column({nullable: true})
@@ -30,4 +35,15 @@ export class Vehiculo {
     @OneToOne( () => Beacon, beacon => beacon.vehiculo )
     @JoinColumn({name: "beaconID"})
     beacon: Beacon
+
+    GetPositionData(): vehiclePosition {
+        return {
+            vehiculoId: this.id,
+            lat: this.latitud ?? 0,
+            lng: this.longitud ?? 0,
+            speed: this.velocidad ?? 0,
+            heading: this.heading ?? 0,
+            timestamp: this.timestamp ?? new Date()
+        }
+    }
 }

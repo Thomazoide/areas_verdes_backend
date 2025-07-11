@@ -12,3 +12,12 @@ export interface responsePayload<T> {
 export interface checkMACReqBody {
     mac: string
 }
+
+export interface vehiclePosition {
+    vehiculoId: number;
+    lat: number;
+    lng: number;
+    timestamp: Date;
+    speed: number;
+    heading: number;
+}

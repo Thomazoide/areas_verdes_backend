@@ -17,9 +17,21 @@ export class VehicleService {
     }
 
     async FindByID(id: number): Promise<Vehiculo> {
-        const vehicle = await this.vehicleRepo.findOneBy({id});
-        if(!vehicle) throw vehicleNotFoundError;
-        return vehicle;
+        try {
+            if (!id || isNaN(id)) {
+                throw new Error('ID del vehículo inválido');
+            }
+            
+            const vehicle = await this.vehicleRepo.findOneBy({id});
+            if(!vehicle) throw vehicleNotFoundError;
+            return vehicle;
+        } catch (error) {
+            // Asegurar que el error sea un objeto Error válido
+            if (error instanceof Error) {
+                throw error;
+            }
+            throw new Error('Error desconocido al buscar vehículo');
+        }
     }
 
     async FindByPlate(plate: string): Promise<Vehiculo> {
@@ -29,8 +41,26 @@ export class VehicleService {
     }
 
     async UpdateVehicle(vehicle: Partial<Vehiculo>): Promise<Vehiculo> {
-        const exists = await this.vehicleRepo.findOneBy({id: vehicle.id});
-        if(!exists) throw vehicleNotFoundError;
-        return this.vehicleRepo.save(vehicle);
+        try {
+            if (!vehicle.id) {
+                throw new Error('ID del vehículo es requerido');
+            }
+            
+            const exists = await this.vehicleRepo.findOneBy({id: vehicle.id});
+            if(!exists) throw vehicleNotFoundError;
+            
+            const updated = await this.vehicleRepo.save(vehicle);
+            return updated;
+        } catch (error) {
+            // Asegurar que el error sea un objeto Error válido
+            if (error instanceof Error) {
+                throw error;
+            }
+            throw new Error('Error desconocido al actualizar vehículo');
+        }
+    }
+
+    async FindAll(): Promise<Array<Vehiculo>> {
+        return this.vehicleRepo.find();
     }
 };
