@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post } from "@nestjs/common";
 import { Empleado } from "src/models/empleado.model";
 import { Supervisor } from "src/models/supervisor.model";
 import { employeeAndSupervisorService } from "src/services/employeeAndSupervisor.service";
@@ -45,6 +45,22 @@ export class EmployeeAndSupervisorController {
                 message: (e as Error).message,
                 error: true
             };
+        }
+    }
+
+    @Get("supervisores")
+    async FindAll(): Promise<responsePayload<Array<Supervisor>>> {
+        try {
+            return {
+                message: "supervisores encontrados",
+                data: await this.service.GetAllSupervisors(),
+                error: false
+            }
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            }
         }
     }
 };

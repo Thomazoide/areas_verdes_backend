@@ -66,20 +66,20 @@ export class TeamService {
             where: {
                 id: teamID
             },
-            relations: ["empleados", "supervisores", "vehiculos"]
+            relations: ["empleados", "supervisor", "vehiculo"]
         });
     }
 
     async GetAllTeams(): Promise<Array<Equipo>> {
         return this.teamsRepo.find({
-            relations: ["empleados", "supervisores", "vehiculos"]
+            relations: ["empleados", "supervisor", "vehiculo"]
         });
     }
 
     async FindByID(id: number): Promise<Equipo> {
         const team = await this.teamsRepo.findOne({
             where: {id},
-            relations: ["empleados", "supervisores", "vehiculos"]
+            relations: ["empleados", "supervisor", "vehiculo"]
         });
         if(!team) throw teamNotFoundError;
         return team;

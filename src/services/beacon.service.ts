@@ -24,4 +24,8 @@ export class BeaconService {
         if(!beacon) throw beaconNotFoundError;
         return beacon;
     }
+
+    async FindAll(): Promise<Array<Beacon>> {
+        return this.repo.find();
+    }
 };

@@ -1,4 +1,4 @@
-import { Body, Controller, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Param, ParseIntPipe, Post, Get } from "@nestjs/common";
 import { Equipo } from "src/models/equipo.model";
 import { TeamService } from "src/services/team.service";
 import { responsePayload } from "src/types/types";
@@ -27,6 +27,22 @@ export class TeamsController {
                 message: (e as Error).message,
                 error: true
             };
+        }
+    }
+
+    @Get()
+    async FindAll(): Promise<responsePayload<Array<Equipo>>> {
+        try {
+            return {
+                message: "equipos encontrados",
+                data: await this.service.GetAllTeams(),
+                error: false
+            }
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            }
         }
     }
 };

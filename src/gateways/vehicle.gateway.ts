@@ -87,7 +87,10 @@ export class VehicleGateway {
             }
             
             const vehiculo = await this.service.FindByID(data.id);
-            return vehiculo.GetPositionData();
+            const positionData = vehiculo.GetPositionData();
+            console.log(positionData);
+            this.server.emit("posicion-actualizada", positionData);
+            return positionData;
         } catch (error) {
             console.error('Error en GetPosition:', error);
             throw new WsException(error instanceof Error ? error.message : 'Error obteniendo posición');
