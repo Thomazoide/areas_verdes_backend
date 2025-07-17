@@ -49,18 +49,53 @@ export class EmployeeAndSupervisorController {
     }
 
     @Get("supervisores")
-    async FindAll(): Promise<responsePayload<Array<Supervisor>>> {
+    async FindAllSupervisors(): Promise<responsePayload<Array<Supervisor>>> {
         try {
             return {
                 message: "supervisores encontrados",
                 data: await this.service.GetAllSupervisors(),
                 error: false
-            }
+            };
         } catch(e) {
             return {
                 message: (e as Error).message,
                 error: true
-            }
-        }
+            };
+        };
+    }
+
+    @Get("trabajadores")
+    async FindAllEmployees(): Promise<responsePayload<Array<Empleado>>> {
+        try {
+            return {
+                message: "trabajadores encontrados",
+                data: await this.service.GetAllEmployees(),
+                error: false
+            };
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            };
+        };
+    }
+
+    @Post("trabajadores/add-many")
+    async AddManyEmployees(
+        @Body()
+        data: Array<Empleado>
+    ): Promise<responsePayload<Array<Empleado>>> {
+        try {
+            return {
+                message: "trabajdores agregados",
+                data: await this.service.AddManyEmployees(data),
+                error: false
+            };
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            };
+        };
     }
 };

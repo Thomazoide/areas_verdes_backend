@@ -63,4 +63,13 @@ export class employeeAndSupervisorService {
     async GetAllSupervisors(): Promise<Array<Supervisor>> {
         return this.supervisorRepo.find();
     }
+
+    async AddManyEmployees(data: Array<Empleado>): Promise<Array<Empleado>> {
+        const newEmployees: Array<Empleado> = [];
+        for(const auxEmployee of data) {
+            const newEmployee = this.employeeRepo.create(auxEmployee);
+            newEmployees.push( await this.employeeRepo.save(newEmployee) );
+        }
+        return newEmployees;
+    }
 };

@@ -14,8 +14,11 @@ export class Empleado {
     email: string;
     @Column()
     celular: string;
-    @Column()
+    @Column({nullable: true})
     equipoID: number;
+    //timestamp pero guardado como un ISO string para evitar problemas de tipos
+    @Column()
+    fechaIngreso: string;
     @ManyToOne( () => Equipo, equipo => equipo.empleados, {nullable: true} )
     @JoinColumn({name: "equipoID"})
     equipo: Equipo
