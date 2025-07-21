@@ -26,6 +26,10 @@ export class BeaconService {
     }
 
     async FindAll(): Promise<Array<Beacon>> {
-        return this.repo.find();
+        return this.repo.find({
+            relations: [
+                "zona",
+            ],
+        });
     }
 };

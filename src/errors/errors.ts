@@ -4,3 +4,4 @@ export const supervisorNotFoundError: Error = new Error("supervisor no encontrad
 export const beaconNotFoundError: Error = new Error("beacon no encontrado");
 export const teamNotFoundError: Error = new Error("equipo no encontrado");
 export const zoneNotFoundError: Error = new Error("plaza no encontrada");
+export const relationError: Error = new Error("Entidad ya cuenta con dicha relación");
