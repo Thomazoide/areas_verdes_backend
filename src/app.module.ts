@@ -9,6 +9,7 @@ import { EmployeeAndServiceModule } from './modules/employeeAndSupervisor.module
 import { TeamsModule } from './modules/teams.module';
 import { VehicleModule } from './modules/vehicle.module';
 import { ZoneModule } from './modules/zone.module';
+import { RegistrosModule } from './modules/registros.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { ZoneModule } from './modules/zone.module';
     EmployeeAndServiceModule,
     TeamsModule,
     VehicleModule,
-    ZoneModule
+    ZoneModule,
+    RegistrosModule
   ],
   controllers: [AppController],
   providers: [AppService],
