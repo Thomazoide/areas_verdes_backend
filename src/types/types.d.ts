@@ -21,3 +21,8 @@ export interface vehiclePosition {
     speed: number;
     heading: number;
 }
+
+export interface SignInPayload {
+    rut: string;
+    patente: string;
+}

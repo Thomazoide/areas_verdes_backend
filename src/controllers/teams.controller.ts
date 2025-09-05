@@ -1,7 +1,7 @@
 import { Body, Controller, Param, ParseIntPipe, Post, Get } from "@nestjs/common";
 import { Equipo } from "src/models/equipo.model";
 import { TeamService } from "src/services/team.service";
-import { responsePayload } from "src/types/types";
+import { responsePayload, SignInPayload } from "src/types/types";
 
 @Controller("equipos")
 export class TeamsController {
@@ -43,6 +43,25 @@ export class TeamsController {
                 message: (e as Error).message,
                 error: true
             }
+        }
+    }
+
+    @Post("sign-in")
+    async SignIn(
+        @Body()
+        data: SignInPayload
+    ): Promise<responsePayload<Equipo>> {
+        try {
+            return {
+                message: "Sesión iniciada con éxito",
+                data: await this.service.SignIn(data),
+                error: false
+            };
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            };
         }
     }
 };

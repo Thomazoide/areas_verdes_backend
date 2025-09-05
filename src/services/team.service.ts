@@ -5,6 +5,7 @@ import { Empleado } from "src/models/empleado.model";
 import { Equipo } from "src/models/equipo.model";
 import { Supervisor } from "src/models/supervisor.model";
 import { Vehiculo } from "src/models/vehiculo.model";
+import { SignInPayload } from "src/types/types";
 import { Repository } from "typeorm";
 
 @Injectable()
@@ -87,5 +88,31 @@ export class TeamService {
 
     async UpdateTeam(team: Partial<Equipo>): Promise<Equipo> {
         return this.teamsRepo.save(team);
+    }
+
+    async SignIn(data: SignInPayload): Promise<Equipo> {
+        const supervisor = await this.supervisorRepo.findOne({
+            where: {
+                rut: data.rut
+            }
+        });
+        const vehiculo = await this.vehicleRepo.findOne({
+            where: {
+                patente: data.patente
+            }
+        });
+        const equipo = await this.teamsRepo.findOne({
+            where: {
+                vehiculoID: vehiculo.id,
+                supervisorID: supervisor.id
+            },
+            relations: ["supervisor", "vehiculo"]
+        });
+
+        if(!supervisor || !vehiculo || !equipo) {
+            throw teamNotFoundError;
+        }
+
+        return equipo;
     }
 };
