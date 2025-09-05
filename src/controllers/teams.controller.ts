@@ -9,6 +9,25 @@ export class TeamsController {
         private readonly service: TeamService
     ){};
 
+    @Post("sign-in")
+    async SignIn(
+        @Body()
+        data: SignInPayload
+    ): Promise<responsePayload<Equipo>> {
+        try {
+            return {
+                message: "Sesión iniciada con éxito",
+                data: await this.service.SignIn(data),
+                error: false
+            };
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            };
+        }
+    }
+
     @Post(":id")
     async CreateTeam(
         @Body()
@@ -46,22 +65,5 @@ export class TeamsController {
         }
     }
 
-    @Post("sign-in")
-    async SignIn(
-        @Body()
-        data: SignInPayload
-    ): Promise<responsePayload<Equipo>> {
-        try {
-            return {
-                message: "Sesión iniciada con éxito",
-                data: await this.service.SignIn(data),
-                error: false
-            };
-        } catch(e) {
-            return {
-                message: (e as Error).message,
-                error: true
-            };
-        }
-    }
+    
 };
