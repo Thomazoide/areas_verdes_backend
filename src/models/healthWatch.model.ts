@@ -18,4 +18,4 @@
 //     empleado: Empleado;
 //     @Column({default: false})
 //     danger: boolean;
-// }
+// } 
