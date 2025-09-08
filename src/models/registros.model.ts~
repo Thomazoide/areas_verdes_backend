@@ -13,7 +13,7 @@ export class Registro {
     hora_llegada: string; //hora en formato HH:mm
     @Column()
     hora_salida: string; //hora en formato HH:mm
-    @Column()
+    @Column({default: null})
     supervisor_id: number;
     @ManyToOne( () => Supervisor, supervisor => supervisor.registros )
     @JoinColumn({name: "supervisor_id"})
