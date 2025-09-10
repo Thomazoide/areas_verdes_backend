@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typ
 import { Equipo } from "./equipo.model";
 import { Beacon } from "./beacon.model";
 import { Registro } from "./registros.model";
+import { VisitForm } from "./visitForms.model";
 
 @Entity("supervisores")
 export class Supervisor {
@@ -23,4 +24,6 @@ export class Supervisor {
     beacon: Beacon
     @OneToMany( () => Registro, registro => registro.supervisor )
     registros: Registro[];
+    @OneToMany( () => VisitForm, formulario => formulario.supervisor )
+    formularios: VisitForm[];
 }

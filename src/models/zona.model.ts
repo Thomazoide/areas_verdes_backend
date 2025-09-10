@@ -1,6 +1,7 @@
 import { Punto } from "src/types/types";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Beacon } from "./beacon.model";
+import { VisitForm } from "./visitForms.model";
 
 @Entity("zonas")
 export class Zona {
@@ -19,4 +20,6 @@ export class Zona {
     @OneToOne( () => Beacon, beacon => beacon.zona )
     @JoinColumn({name: "beaconID"})
     beacon: Beacon;
+    @OneToMany( () => VisitForm, formulario => formulario.zona )
+    formularios: VisitForm[];
 };
