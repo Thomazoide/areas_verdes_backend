@@ -83,4 +83,23 @@ export class ZoneController {
             };
         }
     }
+
+    @Get(":id")
+    async FindByID(
+        @Param("id", ParseIntPipe)
+        id: number
+    ): Promise<responsePayload<Zona>> {
+        try {
+            return {
+                message: "Zona encontrada",
+                data: await this.service.GetByID(id),
+                error: false
+            };
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            }
+        }
+    }
 };

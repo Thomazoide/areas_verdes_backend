@@ -45,4 +45,10 @@ export class ZoneService {
     async FindAll(): Promise<Array<Zona>> {
         return this.repo.find();
     }
+
+    async GetByID(id: number): Promise<Zona> {
+        const zona = await this.repo.findOneBy({id});
+        if(!zona) throw zoneNotFoundError;
+        return zona;
+    }
 };
