@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { Empleado } from "src/models/empleado.model";
 import { Supervisor } from "src/models/supervisor.model";
 import { employeeAndSupervisorService } from "src/services/employeeAndSupervisor.service";
@@ -97,5 +97,24 @@ export class EmployeeAndSupervisorController {
                 error: true
             };
         };
+    }
+
+    @Get("supervisor/:id")
+    async GetSupervisorByID(
+        @Param("id", ParseIntPipe)
+        id: number
+    ): Promise<responsePayload<Supervisor>> {
+        try {
+            return {
+                message: "Supervisor/a encontrado/a!",
+                data: await this.service.FindSupervisorByID(id),
+                error: false
+            };
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            };
+        }
     }
 };
