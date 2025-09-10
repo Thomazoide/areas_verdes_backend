@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { beaconNotFoundError, employeeNotFoundError, supervisorNotFoundError } from "src/errors/errors";
 import { Empleado } from "src/models/empleado.model";
 import { Supervisor } from "src/models/supervisor.model";
+import { VisitForm } from "src/models/visitForms.model";
 import { Repository } from "typeorm";
 
 @Injectable()
@@ -11,7 +12,9 @@ export class employeeAndSupervisorService {
         @InjectRepository(Supervisor)
         private readonly supervisorRepo: Repository<Supervisor>,
         @InjectRepository(Empleado)
-        private readonly employeeRepo: Repository<Empleado>
+        private readonly employeeRepo: Repository<Empleado>,
+        @InjectRepository(VisitForm)
+        private readonly formRepo: Repository<VisitForm>
     ){}
 
     async CreateEmployee(empl: Partial<Empleado>): Promise<Empleado> {
