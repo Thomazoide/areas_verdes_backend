@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Supervisor } from "./supervisor.model";
 import { Zona } from "./zona.model";
+import { NIVEL_DE_BASURA } from "src/types/types";
 
 @Entity("formularios")
 export class VisitForm {
@@ -9,26 +10,25 @@ export class VisitForm {
     @Column()
     fecha: string; //ISO string de una fecha
     @Column()
+    zona_id: number;
+    @Column()
     supervisor_id: number;
     @ManyToOne( () => Supervisor, supervisor => supervisor.formularios )
     @JoinColumn({name: "supervisor_id"})
     supervisor: Supervisor
     @ManyToOne( () => Zona, zona => zona.formularios )
+    @JoinColumn({name: "zona_id"})
     zona: Zona;
-    @Column({nullable: true})
-    campo1: string;
-    @Column({nullable: true})
-    pic1: string;
-    @Column({nullable: true})
-    campo2: string;
-    @Column({nullable: true})
-    pic2: string;
-    @Column({nullable: true})
-    campo3: string;
-    @Column({nullable: true})
-    pic3: string;
-    @Column({nullable: true})
-    campo4: string;
-    @Column({nullable: true})
-    pic4: string;
+    @Column()
+    comentarios: string;
+    @Column({default: false})
+    requiere_corte_cesped: boolean;
+    @Column({default: false})
+    hay_gente_acampando: boolean;
+    @Column({default: false})
+    mobiliario_danado: boolean;
+    @Column({default: NIVEL_DE_BASURA.BAJO})
+    nivel_de_basura: NIVEL_DE_BASURA;
+    @Column({default: null})
+    foto: string;
 }

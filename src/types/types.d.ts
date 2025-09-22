@@ -26,3 +26,9 @@ export interface SignInPayload {
     rut: string;
     patente: string;
 }
+
+export enum NIVEL_DE_BASURA {
+    ALTO = "ALTO",
+    MEDIO = "MEDIO",
+    BAJO = "BAJO"
+};
