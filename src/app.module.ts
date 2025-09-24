@@ -10,6 +10,7 @@ import { TeamsModule } from './modules/teams.module';
 import { VehicleModule } from './modules/vehicle.module';
 import { ZoneModule } from './modules/zone.module';
 import { RegistrosModule } from './modules/registros.module';
+import { VisitFormModule } from './modules/visitForm.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { RegistrosModule } from './modules/registros.module';
     TeamsModule,
     VehicleModule,
     ZoneModule,
-    RegistrosModule
+    RegistrosModule,
+    VisitFormModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,7 +1,7 @@
 import { Body, Controller, Param, ParseIntPipe, Post, Get } from "@nestjs/common";
 import { Equipo } from "src/models/equipo.model";
 import { TeamService } from "src/services/team.service";
-import { responsePayload, SignInPayload } from "src/types/types";
+import { responsePayload, SignInPayload } from "../types/types";
 
 @Controller("equipos")
 export class TeamsController {

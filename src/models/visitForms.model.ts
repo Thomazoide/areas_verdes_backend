@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Supervisor } from "./supervisor.model";
 import { Zona } from "./zona.model";
-import { NIVEL_DE_BASURA } from "src/types/types";
+import { NIVEL_DE_BASURA } from "../types/types";
 
 @Entity("formularios")
 export class VisitForm {

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { Vehiculo } from "src/models/vehiculo.model";
 import { VehicleService } from "src/services/vehicle.service";
-import { responsePayload } from "src/types/types";
+import { responsePayload } from "../types/types";
 
 @Controller("vehiculos")
 export class VehicleController {

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common
 import { Empleado } from "src/models/empleado.model";
 import { Supervisor } from "src/models/supervisor.model";
 import { employeeAndSupervisorService } from "src/services/employeeAndSupervisor.service";
-import { responsePayload } from "src/types/types";
+import { responsePayload } from "../types/types";
 
 @Controller()
 export class EmployeeAndSupervisorController {
