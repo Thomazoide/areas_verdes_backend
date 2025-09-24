@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { Registro } from "src/models/registros.model";
 import { RegistroService } from "src/services/registro.service";
-import { responsePayload } from "src/types/types";
+import { responsePayload } from "../types/types";
 
 @Controller("/registros")
 export class RegistroController {

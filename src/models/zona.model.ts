@@ -1,4 +1,4 @@
-import { Punto } from "src/types/types";
+import { Punto } from "../types/types";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Beacon } from "./beacon.model";
 import { VisitForm } from "./visitForms.model";

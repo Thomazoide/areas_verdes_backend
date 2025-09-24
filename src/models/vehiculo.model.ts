@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./equipo.model";
 import { Beacon } from "./beacon.model";
-import { vehiclePosition } from "src/types/types";
+import { vehiclePosition } from "../types/types";
 
 @Entity("vehiculos")
 export class Vehiculo {

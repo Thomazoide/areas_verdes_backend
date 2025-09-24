@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { Zona } from "src/models/zona.model";
 import { ZoneService } from "src/services/zone.service";
-import { responsePayload } from "src/types/types";
+import { responsePayload } from "../types/types";
 
 @Controller("plazas")
 export class ZoneController {

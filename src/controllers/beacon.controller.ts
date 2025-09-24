@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { Beacon } from "src/models/beacon.model";
 import { BeaconService } from "src/services/beacon.service";
-import { checkMACReqBody, responsePayload } from "src/types/types";
+import { checkMACReqBody, responsePayload } from "../types/types";
 
 @Controller("beacons")
 export class BeaconController {

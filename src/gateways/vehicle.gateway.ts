@@ -2,7 +2,7 @@ import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, WsExc
 import { Server } from "socket.io";
 import { Vehiculo } from "src/models/vehiculo.model";
 import { VehicleService } from "src/services/vehicle.service";
-import { vehiclePosition } from "src/types/types";
+import { vehiclePosition } from "../types/types";
 import { UseFilters } from "@nestjs/common";
 import { WebSocketExceptionFilter } from "src/exceptions/websocket-exceptions.filter";
 

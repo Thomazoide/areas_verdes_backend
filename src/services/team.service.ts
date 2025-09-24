@@ -5,7 +5,7 @@ import { Empleado } from "src/models/empleado.model";
 import { Equipo } from "src/models/equipo.model";
 import { Supervisor } from "src/models/supervisor.model";
 import { Vehiculo } from "src/models/vehiculo.model";
-import { SignInPayload } from "src/types/types";
+import { SignInPayload } from "../types/types";
 import { Repository } from "typeorm";
 
 @Injectable()
