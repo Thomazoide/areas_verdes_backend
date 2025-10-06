@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "crypto"
+import {sign, SignOptions} from "jsonwebtoken"
 
 export class Encrypter {
     constructor(secret: string, pepper: string){
@@ -18,5 +19,13 @@ export class Encrypter {
         const bufferB = Buffer.from(encryptedPassword, "hex");
         if (bufferA.length !== bufferB.length) return false;
         return timingSafeEqual(bufferA, bufferB);
+    }
+
+    CreateJWT(payload: Record<string, any>): string {
+        const opts: SignOptions = {
+            algorithm: "HS256",
+            expiresIn: "3h"
+        };
+        return sign(payload, this.Secret, opts);
     }
 }
