@@ -15,7 +15,7 @@ export class Zona {
     lastVisited: Date;
     @Column()
     info: string;
-    @Column()
+    @Column({default: null})
     beaconID: number;
     @OneToOne( () => Beacon, beacon => beacon.zona )
     @JoinColumn({name: "beaconID"})
