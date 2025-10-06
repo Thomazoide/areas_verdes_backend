@@ -18,6 +18,20 @@ export class ZoneService {
         const zona = this.repo.create(data);
         return this.repo.save(zona);
     }
+    
+    async CreateMultiple(data: Array<Partial<Zona>>): Promise<Array<Zona>> {
+        const sanitized = data.map( (zona) => {
+            const {id, ...rest} = zona;
+            if(id){
+                return rest as Partial<Zona>
+            }
+            return zona;
+        } );
+        const entities = this.repo.create(sanitized);
+        return this.repo.save(entities, {
+            chunk: 100
+        });
+    }
 
     async GetZoneByBeaconID(beaconID: number): Promise<Zona> {
         const zona = await this.repo.findOneBy({beaconID});

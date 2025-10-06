@@ -44,6 +44,25 @@ export class ZoneController {
         }
     }
 
+    @Post("add-multiple")
+    async AddMultiple(
+        @Body()
+        data: Array<Partial<Zona>>
+    ): Promise<responsePayload<Array<Zona>>> {
+        try {
+            return {
+                message: "zonas agregadas",
+                data: await this.service.CreateMultiple(data),
+                error: false
+            };
+        } catch(err) {
+            return {
+                message: (err as Error).message,
+                error:true
+            };
+        }
+    }
+
     @Get("by-beacon-id/:id")
     async GetByBeaconID(
         @Param("id", ParseIntPipe)
