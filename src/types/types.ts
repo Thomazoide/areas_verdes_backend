@@ -39,3 +39,5 @@ export interface logInPayload {
     rut?: string;
     password: string;
 };
+
+export type WorkOrderType = "Areas verdes" | "Emergencias" | "Obras públicas"

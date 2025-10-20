@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./equipo.model";
 import { VisitForm } from "./visitForms.model";
+import { WorkOrderType } from "src/types/types";
 
 @Entity("ordened_trabajo")
 export class WorkOrder {
@@ -24,4 +25,6 @@ export class WorkOrder {
     @OneToOne( () => VisitForm, form => form.ordenTrabajo, {nullable: true} )
     @JoinColumn({name: "visitFormID"})
     visitForm: VisitForm | null;
+    @Column({default: "Areas verdes"})
+    tipo: WorkOrderType
 };
