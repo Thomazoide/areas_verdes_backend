@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Supervisor } from "./supervisor.model";
 import { Zona } from "./zona.model";
 import { NIVEL_DE_BASURA } from "../types/types";
+import { WorkOrder } from "./workOrder.models";
 
 @Entity("formularios")
 export class VisitForm {
@@ -31,4 +32,9 @@ export class VisitForm {
     nivel_de_basura: NIVEL_DE_BASURA;
     @Column({default: null})
     foto: string;
+    @Column({nullable: true})
+    orderID: number | null;
+    @OneToOne( () => WorkOrder, orden => orden.visitForm, {nullable: true} )
+    @JoinColumn({name: "orderID"})
+    ordenTrabajo: WorkOrder | null;
 }

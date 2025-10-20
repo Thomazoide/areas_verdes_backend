@@ -11,6 +11,7 @@ import { VehicleModule } from './modules/vehicle.module';
 import { ZoneModule } from './modules/zone.module';
 import { RegistrosModule } from './modules/registros.module';
 import { VisitFormModule } from './modules/visitForm.module';
+import { WorkOrdersModule } from './modules/workOrders.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { VisitFormModule } from './modules/visitForm.module';
     VehicleModule,
     ZoneModule,
     RegistrosModule,
-    VisitFormModule
+    VisitFormModule,
+    WorkOrdersModule
   ],
   controllers: [AppController],
   providers: [AppService],

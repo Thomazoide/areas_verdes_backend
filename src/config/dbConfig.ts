@@ -7,6 +7,7 @@ import { Registro } from "src/models/registros.model";
 import { Supervisor } from "src/models/supervisor.model";
 import { Vehiculo } from "src/models/vehiculo.model";
 import { VisitForm } from "src/models/visitForms.model";
+import { WorkOrder } from "src/models/workOrder.models";
 import { Zona } from "src/models/zona.model";
 
 export const typeOrmConfig = (env: ConfigService): TypeOrmModuleOptions => ({
@@ -16,6 +17,6 @@ export const typeOrmConfig = (env: ConfigService): TypeOrmModuleOptions => ({
     database: env.get<string>("DBNAME"),
     username: env.get<string>("DBUSER"),
     password: env.get<string>("DBPASS"),
-    entities: [Supervisor, Empleado, Vehiculo, Equipo, Beacon, Zona, Registro, VisitForm],
+    entities: [Supervisor, Empleado, Vehiculo, Equipo, Beacon, Zona, Registro, VisitForm, WorkOrder],
     synchronize: true
 })
