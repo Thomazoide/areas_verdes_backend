@@ -7,11 +7,11 @@ export interface responsePayload<T> {
     message: string;
     data?: T;
     error: boolean;
-}
+};
 
 export interface checkMACReqBody {
     mac: string
-}
+};
 
 export interface vehiclePosition {
     vehiculoId: number;
@@ -20,15 +20,24 @@ export interface vehiclePosition {
     timestamp: Date;
     speed: number;
     heading: number;
-}
+};
 
 export interface SignInPayload {
     rut: string;
     patente: string;
-}
+};
 
 export enum NIVEL_DE_BASURA {
     ALTO = "ALTO",
     MEDIO = "MEDIO",
     BAJO = "BAJO"
 };
+
+export interface logInPayload {
+    username?: string;
+    email?: string;
+    rut?: string;
+    password: string;
+};
+
+export type WorkOrderType = "Areas verdes" | "Emergencias" | "Obras públicas"
