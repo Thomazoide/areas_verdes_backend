@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { WorkOrder } from "src/models/workOrder.models";
 import { WorkOrderService } from "src/services/workOrder.service";
 import { responsePayload } from "src/types/types";
@@ -34,6 +34,25 @@ export class WorkOrderController {
             return {
                 message: "Orden creada/actualizada",
                 data: await this.service.CreateOrUpdateOrder(data),
+                error: false
+            };
+        } catch(err) {
+            return {
+                message: (err as Error).message,
+                error: true
+            };
+        }
+    }
+
+    @Delete(":id")
+    async DeleteOrderByID(
+        @Param("id", ParseIntPipe)
+        ID: number
+    ): Promise<responsePayload<WorkOrder>> {
+        try {
+            return {
+                message: "Orden de trabajo eliminada",
+                data: await this.service.DeletOrderByID(ID),
                 error: false
             };
         } catch(err) {
