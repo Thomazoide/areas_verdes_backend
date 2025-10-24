@@ -20,7 +20,8 @@ export class WorkOrderService {
         return await this.repo.find({
             relations: [
                 "equipo",
-                "visitForm"
+                "visitForm",
+                "zona"
             ]
         });
     }
@@ -32,7 +33,8 @@ export class WorkOrderService {
             },
             relations: [
                 "equipo",
-                "visitForm"
+                "visitForm",
+                "zona"
             ]
         });
     }
@@ -44,7 +46,8 @@ export class WorkOrderService {
             },
             relations: [
                 "equipo",
-                "visitForm"
+                "visitForm",
+                "zona"
             ]
         })
     }
