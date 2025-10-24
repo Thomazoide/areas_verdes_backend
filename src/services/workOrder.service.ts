@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { entityDeleteError, workOrderNotFoundError } from "src/errors/errors";
+import { workOrderNotFoundError } from "src/errors/errors";
 import { WorkOrder } from "src/models/workOrder.models";
 import { Repository } from "typeorm";
 
@@ -59,8 +59,7 @@ export class WorkOrderService {
             }
         });
         if(!exists) throw workOrderNotFoundError;
-        const deleteResult = await this.repo.delete(exists);
-        if(deleteResult.affected === 0) throw entityDeleteError;
+        await this.repo.delete(exists);
         return exists;
     }
 
