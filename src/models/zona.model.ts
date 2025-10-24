@@ -2,6 +2,7 @@ import { Punto } from "../types/types";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Beacon } from "./beacon.model";
 import { VisitForm } from "./visitForms.model";
+import { WorkOrder } from "./workOrder.models";
 
 @Entity("zonas")
 export class Zona {
@@ -20,6 +21,8 @@ export class Zona {
     @OneToOne( () => Beacon, beacon => beacon.zona )
     @JoinColumn({name: "beaconID"})
     beacon: Beacon;
-    @OneToMany( () => VisitForm, formulario => formulario.zona )
-    formularios: VisitForm[];
+    @OneToMany( () => VisitForm, formulario => formulario.zona, {nullable: true} )
+    formularios: VisitForm[] | null;
+    @OneToMany( () => WorkOrder, wo => wo.zona, {nullable: true} )
+    workOrders: WorkOrder[] | null;
 };

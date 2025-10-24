@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 import { Equipo } from "./equipo.model";
 import { VisitForm } from "./visitForms.model";
 import { WorkOrderType } from "src/types/types";
+import { Zona } from "./zona.model";
 
 @Entity("ordened_trabajo")
 export class WorkOrder {
@@ -27,4 +28,9 @@ export class WorkOrder {
     visitForm: VisitForm | null;
     @Column({default: "Areas verdes"})
     tipo: WorkOrderType
+    @Column({nullable: true})
+    zonaID: number | null;
+    @ManyToOne( () => Zona, zona => zona.workOrders, {nullable: true} )
+    @JoinColumn({name: "zonaID"})
+    zona: Zona;
 };
