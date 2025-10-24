@@ -59,7 +59,7 @@ export class WorkOrderService {
             }
         });
         if(!exists) throw workOrderNotFoundError;
-        await this.repo.delete(exists);
+        await this.repo.delete(ID);
         return exists;
     }
 
