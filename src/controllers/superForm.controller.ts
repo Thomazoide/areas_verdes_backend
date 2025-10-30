@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { superFormNotFoundError } from "src/errors/errors";
 import { SuperForm } from "src/models/superForm.model";
 import { SuperFormService } from "src/services/superForm.service";
@@ -11,14 +12,29 @@ export class SuperFormController {
     ){}
 
     @Post()
+    @UseInterceptors(FileInterceptor("foto", {
+        limits: {
+            fileSize: 5 * 1024 * 1024
+        },
+        fileFilter: (_req, file, cb) => {
+            if(file.mimetype && file.mimetype.startsWith("image/")) return cb(null, true);
+            return cb(new BadRequestException("solo se permiten archivos de imagen"), false);
+        }
+    }))
     async CreateOrUpdateSuperForm(
         @Body()
-        data: Partial<SuperForm>
+        data: Partial<SuperForm>,
+        @UploadedFile()
+        file: {
+            buffer: Buffer;
+            mimetype?: string;
+            originalname?: string;
+        }
     ): Promise<responsePayload<SuperForm>> {
         try {
             return {
                 message: "Super formulario creado/actualizado",
-                data: await this.service.CreateOrUpdateSuperForm(data),
+                data: await this.service.CreateOrUpdateSuperForm(data, file),
                 error: false
             };
         } catch(err) {

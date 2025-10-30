@@ -71,7 +71,7 @@ export class VisitFormService {
 
         const mimeType = file.mimetype || "application/octet-stream";
         const ext = (getExtension(mimeType) as string) || (file.originalname?.split(".").pop() ?? "bin");
-    const key = `visit-forms/${zonaId ?? "unknown-zone"}/${supervisorId ?? "unknown-supervisor"}/${randomUUID()}.${ext}`;
+        const key = `visit-forms/${zonaId ?? "unknown-zone"}/${supervisorId ?? "unknown-supervisor"}/${randomUUID()}.${ext}`;
 
         const putParams: PutObjectCommandInput = {
             Bucket: this.bucket,
