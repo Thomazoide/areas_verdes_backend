@@ -14,3 +14,4 @@ export const passwordDoNotMatchError: Error = new Error("contraseñas no coincid
 export const incorrectPasswordError: Error = new Error("contraseña incorrecta");
 export const workOrderNotFoundError: Error = new Error("orden de trabajo no encontrada");
 export const entityDeleteError: Error = new Error("error al borrar entidad deseada");
+export const superFormNotFoundError: Error = new Error("superForm no encontrado o inexistente");

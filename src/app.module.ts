@@ -12,6 +12,7 @@ import { ZoneModule } from './modules/zone.module';
 import { RegistrosModule } from './modules/registros.module';
 import { VisitFormModule } from './modules/visitForm.module';
 import { WorkOrdersModule } from './modules/workOrders.module';
+import { SuperFormModule } from './modules/superForm.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { WorkOrdersModule } from './modules/workOrders.module';
     ZoneModule,
     RegistrosModule,
     VisitFormModule,
-    WorkOrdersModule
+    WorkOrdersModule,
+    SuperFormModule
   ],
   controllers: [AppController],
   providers: [AppService],

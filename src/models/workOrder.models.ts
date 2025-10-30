@@ -3,6 +3,7 @@ import { Equipo } from "./equipo.model";
 import { VisitForm } from "./visitForms.model";
 import { WorkOrderType } from "src/types/types";
 import { Zona } from "./zona.model";
+import { SuperForm } from "./superForm.model";
 
 @Entity("ordened_trabajo")
 export class WorkOrder {
@@ -33,4 +34,9 @@ export class WorkOrder {
     @ManyToOne( () => Zona, zona => zona.workOrders, {nullable: true} )
     @JoinColumn({name: "zonaID"})
     zona: Zona;
+    @Column({nullable: true, default: null})
+    superFormID: number | null;
+    @OneToOne( () => SuperForm, sf => sf.workOrder, {nullable: true} )
+    @JoinColumn({name: "superFormID"})
+    superForm: SuperForm | null;
 };
