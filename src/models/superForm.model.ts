@@ -14,8 +14,8 @@ export class SuperForm {
     @OneToOne( () => WorkOrder, wo => wo.superForm, {nullable: true} )
     @JoinColumn({name: "workOrderID"})
     workOrder: WorkOrder | null;
-    @Column()
+    @Column({type: "double precision"})
     lat: number;
-    @Column()
+    @Column({type: "double precision"})
     lng: number;
 }
