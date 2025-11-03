@@ -11,6 +11,15 @@ export class SuperFormController {
         private readonly service: SuperFormService
     ){}
 
+    private ParseBody(raw: any): Partial<SuperForm> {
+        const data: Partial<SuperForm> = {
+            description: raw?.description ? raw.description : undefined,
+            lat: raw?.lat ? Number(raw.lat) : undefined,
+            lng: raw?.lng ? Number(raw.lng) : undefined,
+        };
+        return data;
+    }
+
     @Post()
     @UseInterceptors(FileInterceptor("foto", {
         limits: {
@@ -23,7 +32,7 @@ export class SuperFormController {
     }))
     async CreateOrUpdateSuperForm(
         @Body()
-        data: Partial<SuperForm>,
+        raw: any,
         @UploadedFile()
         file: {
             buffer: Buffer;
@@ -32,6 +41,7 @@ export class SuperFormController {
         }
     ): Promise<responsePayload<SuperForm>> {
         try {
+            const data = this.ParseBody(raw);
             return {
                 message: "Super formulario creado/actualizado",
                 data: await this.service.CreateOrUpdateSuperForm(data, file),
