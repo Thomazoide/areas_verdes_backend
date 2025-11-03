@@ -43,4 +43,6 @@ export class WorkOrder {
     lat: number | null;
     @Column({type: "double precision", nullable: true, default: null})
     lng: number | null;
+    @Column({nullable: true, default: null})
+    reference: string;
 };
