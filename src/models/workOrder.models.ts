@@ -39,4 +39,8 @@ export class WorkOrder {
     @OneToOne( () => SuperForm, sf => sf.workOrder, {nullable: true} )
     @JoinColumn({name: "superFormID"})
     superForm: SuperForm | null;
+    @Column({nullable: true, default: null})
+    lat: number | null;
+    @Column({nullable: true, default: null})
+    lng: number | null;
 };
