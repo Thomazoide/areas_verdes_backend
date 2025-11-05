@@ -21,7 +21,8 @@ export class WorkOrderService {
             relations: [
                 "equipo",
                 "visitForm",
-                "zona"
+                "zona",
+                "superForm"
             ]
         });
     }
@@ -34,7 +35,8 @@ export class WorkOrderService {
             relations: [
                 "equipo",
                 "visitForm",
-                "zona"
+                "zona",
+                "superForm"
             ]
         });
     }
@@ -47,7 +49,8 @@ export class WorkOrderService {
             relations: [
                 "equipo",
                 "visitForm",
-                "zona"
+                "zona",
+                "superForm"
             ]
         })
     }
