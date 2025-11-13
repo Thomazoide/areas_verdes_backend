@@ -72,7 +72,23 @@ export class VisitFormController {
                 error: true
             }
         }
-    } 
+    }
+
+    @Get("sin-zona")
+    async FindWithoutZone(): Promise<responsePayload<VisitForm[]>> {
+        try {
+            return {
+                message: "Formularios sin zona especifica asignada",
+                data: await this.service.FindWithoutZone(),
+                error: false
+            };
+        } catch(e) {
+            return {
+                message: (e as Error).message,
+                error: true
+            }
+        }
+    }
 
     // Obtener formularios por zona
     @Get("zona/:zonaId")

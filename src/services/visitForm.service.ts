@@ -49,13 +49,22 @@ export class VisitFormService {
             where: {
                 zona_id
             },
-            relations: ["supervisor", "zona"]
+            relations: ["supervisor", "zona", "ordenTrabajo"]
         });
+    }
+
+    async FindWithoutZone(): Promise<VisitForm[]> {
+        return await this.repository.find({
+            where: {
+                zona_id: null
+            },
+            relations: ["supervisor", "zona", "ordenTrabajo"]
+        })
     }
 
     async FindAllForms(): Promise<VisitForm[]> {
         return await this.repository.find({
-            relations: ["supervisor", "zona"]
+            relations: ["supervisor", "zona", "ordenTrabajo"]
         });
     }
 
