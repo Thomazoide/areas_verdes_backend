@@ -11,7 +11,7 @@ export class VisitForm {
     @Column()
     fecha: string; //ISO string de una fecha
     @Column({nullable: true})
-    zona_id: number;
+    zona_id: number | null;
     @Column()
     supervisor_id: number;
     @ManyToOne( () => Supervisor, supervisor => supervisor.formularios )
@@ -19,7 +19,7 @@ export class VisitForm {
     supervisor: Supervisor
     @ManyToOne( () => Zona, zona => zona.formularios, {nullable: true} )
     @JoinColumn({name: "zona_id"})
-    zona: Zona;
+    zona: Zona | null;
     @Column()
     comentarios: string;
     @Column({default: false})

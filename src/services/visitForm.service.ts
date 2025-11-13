@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { VisitForm } from "src/models/visitForms.model";
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { randomUUID } from "crypto";
 import { extension as getExtension } from "mime-types";
@@ -56,9 +56,9 @@ export class VisitFormService {
     async FindWithoutZone(): Promise<VisitForm[]> {
         return await this.repository.find({
             where: {
-                zona_id: null
+                zona_id: IsNull(),
             },
-            relations: ["supervisor", "zona", "ordenTrabajo"]
+            relations: ["supervisor", "ordenTrabajo"]
         })
     }
 
