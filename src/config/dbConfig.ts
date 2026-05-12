@@ -12,7 +12,7 @@ import { WorkOrder } from "src/models/workOrder.models";
 import { Zona } from "src/models/zona.model";
 
 export const typeOrmConfig = (env: ConfigService): TypeOrmModuleOptions => ({
-    type: "mariadb",
+    type: "mysql",
     port: Number(env.get<string>("DBPORT")),
     host: env.get<string>("DBHOST"),
     database: env.get<string>("DBNAME"),

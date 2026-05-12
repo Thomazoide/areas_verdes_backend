@@ -1,4 +1,3 @@
-import { PutObjectCommand, PutObjectCommandInput, S3Client } from "@aws-sdk/client-s3";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -7,12 +6,13 @@ import { SuperForm } from "src/models/superForm.model";
 import { Repository } from "typeorm";
 import { extension as getExtension } from "mime-types";
 import { randomUUID } from "crypto";
+import { Storage } from "@google-cloud/storage";
 
 @Injectable()
 export class SuperFormService {
 
-    private s3: S3Client;
-    private bucket: string;
+    private storage: Storage;
+    private bucketName: string;
     private publicBaseURL: string;
 
     constructor(
@@ -20,10 +20,18 @@ export class SuperFormService {
         private readonly repo: Repository<SuperForm>,
         private readonly env: ConfigService
     ){
-        const region = this.env.get<string>("AWS_REGION");
-        this.bucket = this.env.get<string>("BUCKET_NAME");
-        this.publicBaseURL = this.env.get<string>("S3_PUBLIC_URL_BASE") || (this.bucket && region ? `https://${this.bucket}.s3.${region}.amazonaws.com` : "");
-        this.s3 = new S3Client({region});
+        const serviceKey = this.env.get<string>("GCP_SERVICE_KEY");
+        const serviceEmail = this.env.get<string>("GCP_SERVICE_EMAIL");
+        const projectId = this.env.get<string>("GOOGLE_CLOUD_PROJECT");
+        this.bucketName = this.env.get<string>("BUCKET_NAME");
+        this.publicBaseURL = this.env.get<string>("GCS_PUBLIC_URL_BASE");
+        this.storage = new Storage({
+            projectId,
+            credentials: {
+                private_key: serviceKey,
+                client_email: serviceEmail
+            }
+        });
     }
 
     async UploadMulterFileToS3(
@@ -32,24 +40,23 @@ export class SuperFormService {
             mimetype?: string;
             originalname?: string}
     ): Promise<string> {
-        if(!this.bucket) {
+        if(!this.bucketName) {
             throw new Error("error al obtener variables de entorno del bucket");
         }
         const mimeType = file.mimetype || "application/octet-stream";
         const ext = (getExtension(mimeType) as string) || (file.originalname?.split(".").pop() ?? "bin");
-        const key = `super-forms/${randomUUID()}.${ext}`;
-        const putParams: PutObjectCommandInput = {
-            Bucket: this.bucket,
-            Key: key,
-            Body: file.buffer,
-            ContentType: mimeType
-        };
-        const acl = this.env.get("S3_OBJECT_ACL") as PutObjectCommandInput["ACL"] | undefined;
-        if(acl) putParams.ACL = acl;
-        await this.s3.send(new PutObjectCommand(putParams));
+        const fileName = `super-forms/${randomUUID()}.${ext}`;
+        const bucket = this.storage.bucket(this.bucketName);
+        const fileRef = bucket.file(fileName);
+        await fileRef.save(file.buffer, {
+            metadata: {
+                contentType: mimeType
+            },
+            public: true
+        });
         return this.publicBaseURL
-            ? `${this.publicBaseURL}/${key}`
-            : `https://${this.bucket}.s3.amazonaws.com/${key}`;
+            ? `${this.publicBaseURL}/${fileName}`
+            : `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
     }
 
     async CreateOrUpdateSuperForm(data: Partial<SuperForm>, file: {

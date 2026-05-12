@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { VisitForm } from "src/models/visitForms.model";
 import { IsNull, Repository } from "typeorm";
-import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
+import { Storage } from "@google-cloud/storage";
 import { randomUUID } from "crypto";
 import { extension as getExtension } from "mime-types";
 import { ConfigService } from "@nestjs/config";
@@ -14,27 +14,34 @@ export class VisitFormService {
         private readonly repository: Repository<VisitForm>,
         private readonly env: ConfigService
     ){
-        const region = this.env.get<string>("AWS_REGION");
-        this.bucket = this.env.get<string>("BUCKET_NAME") || "";
-        this.publicBaseUrl = this.env.get<string>("S3_PUBLIC_URL_BASE") || (this.bucket && region ? `https://${this.bucket}.s3.${region}.amazonaws.com` : "");
-        this.s3 = new S3Client({ region });
+        const serviceKey = this.env.get<string>("GCP_SERVICE_KEY");
+        const serviceEmail = this.env.get<string>("GCP_SERVICE_EMAIL");
+        const projectId = this.env.get<string>("GOOGLE_CLOUD_PROJECT");
+        this.bucketName = this.env.get<string>("GCS_BUCKET_NAME") || "";
+        this.publicBaseUrl = this.env.get<string>("GCS_PUBLIC_URL_BASE");
+        this.storage = new Storage({
+            projectId,
+            credentials: {
+                private_key: serviceKey,
+                client_email: serviceEmail
+            }
+        });
     };
 
     // configuracion S3
-    private s3: S3Client;
-    private bucket: string;
+    private storage: Storage;
+    private bucketName: string;
     private publicBaseUrl: string;
 
     async CreateVisitForm(
         data: Partial<VisitForm>,
         file?: { buffer: Buffer; mimetype?: string; originalname?: string }
     ): Promise<VisitForm> {
-        // If a photo is provided via Multer, prefer that; otherwise, if a base64/dataURL string is provided, upload it
         let fotoUrl: string | undefined = data.foto || undefined;
         if (file && file.buffer) {
-            fotoUrl = await this.uploadMulterFileToS3(file, data.zona_id, data.supervisor_id);
+            fotoUrl = await this.uploadMulterFileToGCS(file, data.zona_id, data.supervisor_id);
         } else if (data.foto) {
-            fotoUrl = await this.uploadPhotoToS3(data.foto, data.zona_id, data.supervisor_id);
+            fotoUrl = await this.uploadPhotoToGCS(data.foto, data.zona_id, data.supervisor_id);
         }
 
         const newVisitForm = this.repository.create({
@@ -68,45 +75,39 @@ export class VisitFormService {
         });
     }
 
-    // Helpers
-    private async uploadMulterFileToS3(
+    private async uploadMulterFileToGCS(
         file: { buffer: Buffer; mimetype?: string; originalname?: string },
         zonaId?: number,
         supervisorId?: number
     ): Promise<string> {
-        if (!this.bucket) {
-            throw new Error("S3_BUCKET_NAME no está configurado en las variables de entorno");
+        if (!this.bucketName) {
+            throw new Error("GCS_BUCKET_NAME no está configurado en las variables de entorno");
         }
 
         const mimeType = file.mimetype || "application/octet-stream";
         const ext = (getExtension(mimeType) as string) || (file.originalname?.split(".").pop() ?? "bin");
-        const key = `visit-forms/${zonaId ?? "unknown-zone"}/${supervisorId ?? "unknown-supervisor"}/${randomUUID()}.${ext}`;
+        const fileName = `visit-forms/${zonaId ?? "unknown-zone"}/${supervisorId ?? "unknown-supervisor"}/${randomUUID()}.${ext}`;
+        const bucket = this.storage.bucket(this.bucketName);
+        const fileRef = bucket.file(fileName);
 
-        const putParams: PutObjectCommandInput = {
-            Bucket: this.bucket,
-            Key: key,
-            Body: file.buffer,
-            ContentType: mimeType,
-        };
-
-        const acl = this.env.get("S3_OBJECT_ACL") as PutObjectCommandInput["ACL"] | undefined;
-        if (acl) putParams.ACL = acl;
-
-        await this.s3.send(new PutObjectCommand(putParams));
+        await fileRef.save(file.buffer, {
+            metadata: {
+                contentType: mimeType
+            },
+            public: true
+        });
 
         return this.publicBaseUrl
-            ? `${this.publicBaseUrl}/${key}`
-            : `https://${this.bucket}.s3.amazonaws.com/${key}`;
+            ? `${this.publicBaseUrl}/${fileName}`
+            : `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
     }
-    private async uploadPhotoToS3(foto: string, zonaId?: number, supervisorId?: number): Promise<string> {
-        // If already a URL, just store it as-is
+    private async uploadPhotoToGCS(foto: string, zonaId?: number, supervisorId?: number): Promise<string> {
+        // SI ya es URL lo devuelve tal cual
         if (/^https?:\/\//i.test(foto)) return foto;
 
-        if (!this.bucket) {
-            throw new Error("S3_BUCKET_NAME no está configurado en las variables de entorno");
+        if (!this.bucketName) {
+            throw new Error("GCS_BUCKET_NAME no está configurado en las variables de entorno");
         }
-
-        // Detect if 'foto' is a data URL or raw base64
         let mimeType = "image/jpeg";
         let base64Data: string | null = null;
 
@@ -115,33 +116,25 @@ export class VisitFormService {
             mimeType = dataUrlMatch[1];
             base64Data = dataUrlMatch[2];
         } else {
-            // Assume it's base64 (without header)
             base64Data = foto;
         }
 
         const buffer = Buffer.from(base64Data, "base64");
         const ext = getExtension(mimeType) || "jpg";
-    const key = `visit-forms/${zonaId ?? "unknown-zone"}/${supervisorId ?? "unknown-supervisor"}/${randomUUID()}.${ext}`;
+        const fileName = `visit-forms/${zonaId ?? "unknown-zone"}/${supervisorId ?? "unknown-supervisor"}/${randomUUID()}.${ext}`;
 
-        const putParams: PutObjectCommandInput = {
-            Bucket: this.bucket,
-            Key: key,
-            Body: buffer,
-            ContentType: mimeType
-        };
+        const bucket = this.storage.bucket(this.bucketName);
+        const fileRef = bucket.file(fileName);
 
-        // Optionally set ACL if provided (e.g., 'public-read')
-        const acl = this.env.get("S3_OBJECT_ACL") as PutObjectCommandInput["ACL"] | undefined;
-        if (acl) {
-            putParams.ACL = acl;
-        }
-
-        await this.s3.send(new PutObjectCommand(putParams));
-
-        // Prefer a custom public base if provided, else default S3 public URL style
+        await fileRef.save(buffer, {
+            metadata: {
+                contentType: mimeType
+            },
+            public: true
+        });
         const url = this.publicBaseUrl
-            ? `${this.publicBaseUrl}/${key}`
-            : `https://${this.bucket}.s3.${this.env.get<string>("AWS_REGION")}.amazonaws.com/${key}`;
+            ? `${this.publicBaseUrl}/${fileName}`
+            : `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
 
         return url;
     }
